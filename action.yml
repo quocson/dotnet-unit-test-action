@@ -1,0 +1,21 @@
+name: Run .NET Framework Unit Test
+description: This is an action to run all unit tests in files those match `pattern`.
+#Inspired by RachelGanonNew/Run-All-.Net-Unit-Test action
+author: Son Nguyen
+branding:
+  icon: 'check'
+  color: 'green'
+
+runs:
+  using: "composite"
+  steps:
+    - run: | $files = @()
+             Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "${{inputs.pattern}}" | ForEach-Object {$files+=$_.Directory.FullName+"\"+$_.Name}
+             Write-Host $files
+  
+             if ($files -eq "")
+             {
+                echo "No unit test files found."
+             } else {
+                & vstest.console.exe $files /EnableCodeCoverage  /ResultsDirectory:${{ github.workspace }}\TestResults
+             }
