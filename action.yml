@@ -6,6 +6,11 @@ branding:
   icon: 'check'
   color: 'green'
 
+inputs:
+  pattern:
+    description: '.dll test file name search pattern'
+    required: true
+    default: '*Test.dll'
 runs:
   using: "composite"
   steps:
