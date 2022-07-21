@@ -9,15 +9,14 @@ branding:
 runs:
   using: "composite"
   steps:
-    - 
+    - name: Run test
       run: | 
          $files = @()
          Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "${{inputs.pattern}}" | ForEach-Object {$files+=$_.Directory.FullName+"\"+$_.Name}
          Write-Host $files
-
-         if ($files -eq "")
-         {
+         if ($files -eq "") {
             echo "No unit test files found."
          } else {
             & vstest.console.exe $files /EnableCodeCoverage  /ResultsDirectory:${{ github.workspace }}\TestResults
          }
+      shell: pwsh
